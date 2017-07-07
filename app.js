@@ -23,7 +23,7 @@ mongoose.Promise = global.Promise;
 
 //SETTING UP THE DATABASE
 // mongoose.connect("mongodb://localhost/yelp_camp");
-mongoose.connect("mongodb://<arash>:<arashajam>@ds151222.mlab.com:51222/campfinder");
+mongoose.connect("mongodb://arash:arashajam@ds151222.mlab.com:51222/campfinder");
 
 //SET TO EJS
 app.set("view engine", "ejs");
