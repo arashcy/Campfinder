@@ -21,9 +21,7 @@ width: 100%;
 
 }
 
-.thumbnail img{
-    width:100%;
-}
+
 
 .thumbnail{
     outline: none;
@@ -35,6 +33,12 @@ width: 100%;
 .thumbnail .caption-full{
     padding: 10px;
 }
+
+.thumbnail img{
+    width:100%;
+    
+}
+
  
 h1, h2, h4{
     font-family: chalkduster;
@@ -48,6 +52,7 @@ h1, h2, h4{
 .list-group{
     background-color: rgba(176,218,185, .5);
     box-shadow: 5px 5px 15px #111111;
+    position: relative;
 }
 
 #map{
