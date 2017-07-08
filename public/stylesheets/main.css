@@ -17,7 +17,7 @@ width: 100%;
 .jumbotron{
     background-color: yellow;
     box-shadow: 10px 10px 10px #111111;
-background: #E0EAFC;  /* fallback for old browsers */
+    /* background: #E0EAFC;  */
 
 }
 
@@ -29,7 +29,6 @@ background: #E0EAFC;  /* fallback for old browsers */
     outline: none;
     padding: 0;
     box-shadow: 10px 10px 15px #111111;
-    background: #E0EAFC;  /* fallback for old browsers */
 
 }
 
