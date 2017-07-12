@@ -2,7 +2,8 @@
         Campground = require("../models/campground"),
         passport = require("passport"),
         router = express.Router(),
-        middleware = require("../middleware");
+        middleware = require("../middleware"),
+        geocoder    = require("geocoder");
 
     //Renders campground page
     router.get("/", function(req, res){
@@ -25,7 +26,11 @@
             id: req.user._id,
             username: req.user.username
         }
-        var newCampground = {name:name, price:price, image:imageURL, description:desc, author:author};
+        geocoder.geocode(req.body.location, function (err, data) {
+            var lat = data.results[0].geometry.location.lat;
+            var lng = data.results[0].geometry.location.lng;
+            var location = data.results[0].formatted_address;
+            var newCampground = {name: name, image: imageURL, description: desc, price: price, author:author, location: location, lat: lat, lng: lng};
         Campground.create(newCampground, function(error, newCampground){
             if(error){
                 console.log(error);
@@ -34,6 +39,7 @@
                 res.redirect("/campgrounds");    
             }
         });
+    });
     });
     
     //Renders create form
@@ -61,13 +67,28 @@
     
     //Update Logic
     router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
-        Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
-            if(err){
-                res.redirect("/campgrounds");
-            }else{
-                req.flash("success", "Campground post was successfully edited!")
-                res.redirect("/campgrounds/" + req.params.id);            }
-        })
+        geocoder.geocode(req.body.location, function (err, data) {
+            console.log(data.results[0]);
+            if(data.results[0] === 'undefined' || !data.results[0]){
+                res.redirect("/campgrounds/" + req.params.id + "/edit");
+            } else{
+            var lat = data.results[0].geometry.location.lat;
+            var lng = data.results[0].geometry.location.lng;
+            var location = data.results[0].formatted_address;
+            var newCampground = {name: req.body.name, image: req.body.image, description: req.body.description, 
+                            price: req.body.price, location: location, lat: lat, lng: lng};
+            // Campground.findByIdAndUpdate(req.params.id, {$set: newCampground}, function(err, campground){
+                Campground.findByIdAndUpdate(req.params.id, {$set: newCampground}, function(err, updatedCampground){
+                    if(err){
+                    res.redirect("back");
+                    }else{
+                        req.flash("success", "Campground post was successfully edited!")
+                        res.redirect("/campgrounds/" + req.params.id);            
+                    
+                    }
+                })
+            }
+        });
     });
     //Remove logic
     router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res){

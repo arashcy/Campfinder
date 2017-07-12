@@ -7,7 +7,8 @@ var express          = require("express"),
     Comment          = require("./models/comment"),
     User             = require("./models/user"),
     flash            = require("connect-flash"),
-    methodOverride   = require("method-override");
+    methodOverride   = require("method-override"),
+    geocoder         = require("geocoder");
    
    //Requiring routes
 var authRoutes       = require("./routes/auth"),
@@ -16,6 +17,10 @@ var authRoutes       = require("./routes/auth"),
     
 //INITIALIZING APP TO EXPRESS FUNCTION
 var app = express();
+
+//AIzaSyAJ62_qAIDp_zR4T9DDl7tvE837msAdzBc
+
+
 
 //Fixing library warning
 mongoose.Promise = require("bluebird");

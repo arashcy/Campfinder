@@ -8,7 +8,7 @@
                 <li class="list-group-item">Info2</li>
                 <li class="list-group-item">Info3</li>
             </div>
-            <!--<div id="map"></div>-->
+            <div id="map"></div>
         </div>
     
     
@@ -53,9 +53,9 @@
             </div>  
         </div>
     </div>
-    <script 
-    async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXvzyzjGIEYuckfkl8Za4nB2n3j7If2Jc&callback=initMap">
-    </script>
+    <!--<script -->
+    <!--async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXvzyzjGIEYuckfkl8Za4nB2n3j7If2Jc&callback=initMap">-->
+    <!--</script>-->
     
 <script>
   function initMap() {
@@ -68,10 +68,10 @@
         scrollwheel: false
     });
     var contentString = `
-      <strong><%= campground.name %><br>
+      <strong><%= campground.name %><br />
       <%= campground.location %></strong>
       <p><%= campground.description %></p>
-    `;
+    `
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
@@ -84,6 +84,7 @@
     });
   }
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJ62_qAIDp_zR4T9DDl7tvE837msAdzBc&callback=initMap"></script>
 
     
 <% include ../partials/footer %>
