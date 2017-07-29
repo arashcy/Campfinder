@@ -3,7 +3,8 @@
         passport = require("passport"),
         router = express.Router(),
         middleware = require("../middleware"),
-        geocoder    = require("geocoder");
+        geocoder    = require("geocoder"),
+        weather     = require("../weather/weather");
 
     //Renders campground page
     router.get("/", function(req, res){
@@ -30,7 +31,8 @@
             var lat = data.results[0].geometry.location.lat;
             var lng = data.results[0].geometry.location.lng;
             var location = data.results[0].formatted_address;
-            var newCampground = {name: name, image: imageURL, description: desc, price: price, author:author, location: location, lat: lat, lng: lng};
+            
+            var newCampground = {name: name, image: imageURL, description: desc, price: price, author:author, location: location, lat: lat, lng: lng, summary:summary};
         Campground.create(newCampground, function(error, newCampground){
             if(error){
                 console.log(error);
@@ -53,9 +55,25 @@
             if(err){
                 console.log(err);
             }else{
-                res.render("./campground/show", {campground: foundCampground})
+               geocoder.geocode(foundCampground.location, function (err, data) {
+                   if(data.results[0] === 'undefined' || !data.results[0]){
+                   res.redirect("/campgrounds/" + req.params.id + "/edit");
+                } else{
+                    var lat = data.results[0].geometry.location.lat;
+                    var lng = data.results[0].geometry.location.lng;
+                    var location = data.results[0].formatted_address;
+                weather.getWeather(lat, lng, (errorMessage, weatherResult)=>{
+                    if(errorMessage){
+                        console.log(errorMessage);
+                    }else{
+                        var summary = weatherResult.summary;
+                    }
+                res.render("./campground/show", {campground: foundCampground, weatherResult:weatherResult})
+            })
             }
         });
+        }
+    });
     });
     
     //Edit Route
@@ -75,6 +93,7 @@
             var lat = data.results[0].geometry.location.lat;
             var lng = data.results[0].geometry.location.lng;
             var location = data.results[0].formatted_address;
+            
             var newCampground = {name: req.body.name, image: req.body.image, description: req.body.description, 
                             price: req.body.price, location: location, lat: lat, lng: lng};
             // Campground.findByIdAndUpdate(req.params.id, {$set: newCampground}, function(err, campground){

@@ -1,12 +1,16 @@
 <% include ../partials/header %>
+
+
+
+
 <div class="container">    
     <div class="row">
         <div class="col-md-3">
             <p class="lead">CampFinder</p>
             <div class="list-group">
-                <li class="list-group-item">Info1</li>
-                <li class="list-group-item">Info2</li>
-                <li class="list-group-item">Info3</li>
+                <li class="list-group-item"><strong>Weather Report</strong> <span class="glyphicon glyphicon-cloud pull-right"></span></li>
+                <li class="list-group-item">Humidity: <%=weatherResult.humidity%></li>
+                <li class="list-group-item">Temperature: <%=weatherResult.temperature%></li>
             </div>
             <div id="map"></div>
             </br>
@@ -20,7 +24,11 @@
                     <div class="caption-full">
                         <h4 class="pull-right"><%= campground.price%>/Night</h4>
                         <p><%= campground.description%></p>
-                        
+                        <h5>Weather forecast for <%=campground.name%>: </h5>
+                        <p><%=weatherResult.summary%></p>
+                        <h5>Weather report: </h5>
+                        <p>Temperature: <%=weatherResult.temperature%></p>
+                        <p>Humidity: <%=weatherResult.humidity%></p>
                         <% if((currentUser && campground.author.id.equals(currentUser._id)) || (currentUser && currentUser.username == "arash")){%>
                         <a class="btn btn-xs btn-warning" href="/campgrounds/<%=campground.id%>/edit">Edit!</a>    
                         <form id="inline-btn" action="/campgrounds/<%= campground.id%>?_method=DELETE" method="POST">
@@ -91,3 +99,20 @@
 <% include ../partials/footer %>
 
 
+<!--geocode.gecodeAddress(argv.address, (errorMessage, result)=>{-->
+<!--  if(errorMessage){-->
+<!--    console.log(errorMessage)-->
+<!--  } else{-->
+<!--    weather.getWeather(result.latitude, result.longitude, (errorMessage, weatherResult)=>{-->
+<!--      if(errorMessage){-->
+<!--        console.log(errorMessage);-->
+<!--      }else{-->
+<!--        console.log(`${weatherResult.summary}\n-->
+<!--It's currently ${weatherResult.temperature} degrees outside,-->
+<!--and apparent temperature is ${weatherResult.apparentTemp}. \n-->
+<!--Humidity: ${weatherResult.humidity},\n`);-->
+<!--      }-->
+<!--    })-->
+<!--    console.log(JSON.stringify(result, undefined, 2));-->
+<!--  }-->
+<!--});-->
