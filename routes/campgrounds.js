@@ -4,6 +4,8 @@
         router = express.Router(),
         middleware = require("../middleware"),
         geocoder    = require("geocoder"),
+        request     = require("request"),
+        fs          = require("fs"),
         weather     = require("../weather/weather");
 
     //Renders campground page
@@ -12,7 +14,21 @@
            if(err){
                console.log(err);
            } else{
-                res.render("./campground/campgrounds", {campgrounds:allCampgrounds});
+                var now = new Date().toString();
+                var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+                var city, country;
+                request({
+                    url:'http://ipinfo.io/',
+                    json:true
+                    }, function (error, response, body) {
+                        var guestInfo = {
+                            city: body.city,
+                            country: body.country
+                        }
+                        res.render("./campground/campgrounds", {campgrounds:allCampgrounds, guest:guestInfo});
+                });
+           
+                
            }
         });
     });
