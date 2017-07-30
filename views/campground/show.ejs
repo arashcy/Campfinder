@@ -10,7 +10,7 @@
             <div class="list-group">
                 <li class="list-group-item"><strong>Weather Report</strong> <span class="glyphicon glyphicon-cloud pull-right"></span></li>
                 <li class="list-group-item">Humidity: <%=weatherResult.humidity%></li>
-                <li class="list-group-item">Temperature: <%=weatherResult.temperature%></li>
+                <li class="list-group-item">Temperature: <%=((weatherResult.temperature-32)/1.8).toFixed(2)%> °C</li>
             </div>
             <div id="map"></div>
             </br>
@@ -27,7 +27,7 @@
                         <h5>Weather forecast for <%=campground.name%>: </h5>
                         <p><%=weatherResult.summary%></p>
                         <h5>Weather report: </h5>
-                        <p>Temperature: <%=weatherResult.temperature%></p>
+                        <p>Temperature: <%=((weatherResult.temperature-32)/1.8).toFixed(2)%> °C%></p>
                         <p>Humidity: <%=weatherResult.humidity%></p>
                         <% if((currentUser && campground.author.id.equals(currentUser._id)) || (currentUser && currentUser.username == "arash")){%>
                         <a class="btn btn-xs btn-warning" href="/campgrounds/<%=campground.id%>/edit">Edit!</a>    
