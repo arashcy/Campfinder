@@ -65,6 +65,26 @@ app.use(function(req, res, next){
    next();
 });
 
+app.use(function(req, res, next){
+    var now = new Date().toString();
+    var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+    var city, country;
+    request({
+        url:'http://ipinfo.io/',
+        json:true
+        }, function (error, response, body) {
+            var guestInfo = {
+                city: body.city,
+                country: body.country,
+                ip: body.ip
+            }
+        res.locals.guestInfo = guestInfo;
+        res.locals.error = req.flash("error");
+        res.locals.success = req.flash("success");
+        next();
+    })
+});
+
 //Creating a server log
 app.use((req, res, next)=>{
     var now = new Date().toString();
@@ -75,7 +95,7 @@ app.use((req, res, next)=>{
         url:'http://ipinfo.io/',
         json:true
     }, function (error, response, body) {
-        console.log('error:', error); // Print the error if one occurred
+        console.log('body:', body); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         city = body.city;
         country = body.country;

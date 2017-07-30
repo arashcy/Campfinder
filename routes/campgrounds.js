@@ -23,7 +23,8 @@
                     }, function (error, response, body) {
                         var guestInfo = {
                             city: body.city,
-                            country: body.country
+                            country: body.country,
+                            ip: body.ip
                         }
                         res.render("./campground/campgrounds", {campgrounds:allCampgrounds, guest:guestInfo});
                 });
