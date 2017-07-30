@@ -27,6 +27,8 @@
                     }else{
                         comment.author.id = req.user._id;
                         comment.author.username = req.user.username;
+                        var date = new Date();
+                        comment.date = date.toDateString();
                         comment.save();
                         campgroundFound.comments.push(comment);         
                         campgroundFound.save();
@@ -55,6 +57,9 @@
             if(err){
                 res.redirect("back");
             }else{
+                var date = new Date();
+                updatedComment.date = date.toDateString();
+                updatedComment.save();
                 req.flash("success", "Comment was successfully edited!");
                 res.redirect("/campgrounds/" + req.params.id);
             }

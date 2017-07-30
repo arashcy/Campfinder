@@ -8,7 +8,9 @@ var express          = require("express"),
     User             = require("./models/user"),
     flash            = require("connect-flash"),
     methodOverride   = require("method-override"),
-    geocoder         = require("geocoder");
+    geocoder         = require("geocoder"),
+    request          = require("request"),
+    fs               = require("fs");
    
    //Requiring routes
 var authRoutes       = require("./routes/auth"),
@@ -62,6 +64,28 @@ app.use(function(req, res, next){
    res.locals.success = req.flash("success");
    next();
 });
+
+//Creating a server log
+app.use((req, res, next)=>{
+    var now = new Date().toString();
+    var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+    var city, country;
+    
+    request({
+        url:'http://ipinfo.io/',
+        json:true
+    }, function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        city = body.city;
+        country = body.country;
+        var log = `Server accessed: ${now} by ${req.method} method. ${req.url}. IP: ${ip}. Country: ${country}, City: ${city} \n`;
+        fs.appendFile('server.log', log, (error)=>{
+            if(error) console.log(error);
+        })
+    });
+    next();
+})
 
 
 
