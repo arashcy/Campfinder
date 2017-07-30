@@ -68,9 +68,11 @@ app.use(function(req, res, next){
 app.use(function(req, res, next){
     var now = new Date().toString();
     var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+    var list = ip.split(",");
+    ip= list[list.length-1];
     var city, country;
     request({
-        url:'http://ipinfo.io/',
+        url:`http://ipinfo.io/${ip}`,
         json:true
         }, function (error, response, body) {
             var guestInfo = {
@@ -89,6 +91,8 @@ app.use(function(req, res, next){
 app.use((req, res, next)=>{
     var now = new Date().toString();
     var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+        var list = ip.split(",");
+        ip= list[list.length-1];
     var city, country;
     
     request({

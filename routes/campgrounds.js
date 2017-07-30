@@ -14,22 +14,7 @@
            if(err){
                console.log(err);
            } else{
-                var now = new Date().toString();
-                var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
-                var city, country;
-                request({
-                    url:'http://ipinfo.io/',
-                    json:true
-                    }, function (error, response, body) {
-                        var guestInfo = {
-                            city: body.city,
-                            country: body.country,
-                            ip: body.ip
-                        }
-                        res.render("./campground/campgrounds", {campgrounds:allCampgrounds, guest:guestInfo});
-                });
-           
-                
+                    res.render("./campground/campgrounds", {campgrounds:allCampgrounds});
            }
         });
     });
