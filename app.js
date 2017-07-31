@@ -88,28 +88,28 @@ app.use(function(req, res, next){
 });
 
 //Creating a server log
-app.use((req, res, next)=>{
-    var now = new Date().toString();
-    var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
-        var list = ip.split(",");
-        ip= list[list.length-1];
-    var city, country;
+// app.use((req, res, next)=>{
+//     var now = new Date().toString();
+//     var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+//         var list = ip.split(",");
+//         ip= list[list.length-1];
+//     var city, country;
     
-    request({
-        url:'http://ipinfo.io/',
-        json:true
-    }, function (error, response, body) {
-        console.log('body:', body); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        city = body.city;
-        country = body.country;
-        var log = `Server accessed: ${now} by ${req.method} method. ${req.url}. IP: ${ip}. Country: ${country}, City: ${city} \n`;
-        fs.appendFile('server.log', log, (error)=>{
-            if(error) console.log(error);
-        })
-    });
-    next();
-})
+//     request({
+//         url:'http://ipinfo.io/',
+//         json:true
+//     }, function (error, response, body) {
+//         console.log('body:', body); // Print the error if one occurred
+//         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+//         city = body.city;
+//         country = body.country;
+//         var log = `Server accessed: ${now} by ${req.method} method. ${req.url}. IP: ${ip}. Country: ${country}, City: ${city} \n`;
+//         fs.appendFile('server.log', log, (error)=>{
+//             if(error) console.log(error);
+//         })
+//     });
+//     next();
+// })
 
 
 
