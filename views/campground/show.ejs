@@ -35,6 +35,9 @@
                             <button class="btn btn-xs btn-danger">Delete!</button>    
                         </form>
                         <% }%>
+                        <form id="inline-btn" action="/campgrounds/<%= campground._id%>/distance" method="GET">
+                             <button type="submit" class="btn btn-xs btn-info">Calculate Distance</button>
+                        </form>
                         <p><em>Submitted by <%= campground.author.username%></em></p>
                     </div> 
             </div>    
@@ -56,6 +59,7 @@
                             </form>
                             <br></br>
                             <% }%>
+
                         <% });%>   
                     </div>
                 </div>

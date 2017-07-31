@@ -1,23 +1,100 @@
-    var express = require("express"),
-        Campground = require("../models/campground"),
-        passport = require("passport"),
-        router = express.Router(),
-        middleware = require("../middleware"),
+    var express     = require("express"),
+        Campground  = require("../models/campground"),
+        passport    = require("passport"),
+        router      = express.Router(),
+        middleware  = require("../middleware"),
         geocoder    = require("geocoder"),
         request     = require("request"),
         fs          = require("fs"),
         weather     = require("../weather/weather");
-
+        
     //Renders campground page
     router.get("/", function(req, res){
         Campground.find({}, function(err, allCampgrounds){
            if(err){
                console.log(err);
            } else{
+        
                     res.render("./campground/campgrounds", {campgrounds:allCampgrounds});
            }
         });
     });
+    
+    
+    router.get("/:id/distance", function(req, res){
+        var id = req.params.id;
+        Campground.findById(id, function(err, foundCampground){
+             if(err){
+                 console.log(err);
+              }else{
+               geocoder.geocode(foundCampground.location, function (err, data) {
+                   if(data.results[0] === 'undefined' || !data.results[0]){
+                   res.redirect("/campgrounds/" + req.params.id);
+                 } else{
+                    var lat1 = data.results[0].geometry.location.lat;
+                    var lng1 = data.results[0].geometry.location.lng;
+                    var location = data.results[0].formatted_address;
+                    
+                        var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+                        var list = ip.split(",");
+                        ip= list[list.length-1];
+                        var city, country;
+                    request({
+                        url:`http://ipinfo.io/${ip}`,
+                        json:true
+                        }, function (error, response, body) {
+                        var guestInfo = {
+                            city: body.city,
+                            country: body.country,
+                            ip: body.ip
+                        }
+                        console.log(guestInfo.city) //test
+                var guestLocation = `${guestInfo.country} ${guestInfo.city}`;
+                 geocoder.geocode(guestLocation, function (err, data) {
+                  if(data.results[0] === 'undefined' || !data.results[0]){
+                        res.redirect("/campgrounds/" + req.params.id);
+                  } else{
+                              
+                    var lat2 = data.results[0].geometry.location.lat;
+                    var lng2 = data.results[0].geometry.location.lng;
+                    var location2 = data.results[0].formatted_address;
+                    console.log(location2); //test
+                    
+                                       
+                    var R = 6378137; // metres
+                    
+                    // var lat2 = guestInfo.lat;
+                    // var lng2 = guestInfo.lng;
+                    console.log(Math.PI);
+                    console.log(lng2);
+                    var φ1 = lat1 * Math.PI / 180;
+                    var φ2 = (lat2 * Math.PI) / 180;
+                    var Δφ = (lat2-lat1) * Math.PI / 180;;
+                    var Δλ = (lng2-lng1) * Math.PI / 180;;
+                    console.log(φ2); //test
+                    
+                    var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+                    console.log(a); //test
+                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                    console.log(c); //test    
+                    var d = R * c;
+                    
+                console.log(d);
+                res.render(`./campground/distance`, {campground:foundCampground, message:d, guestInfo:guestInfo, guestLat:lat2, guestLng:lng2});
+                  }
+                                 })
+                        });
+ 
+                 }
+               })
+              }
+        })
+    })
+        
+    
+
     
     //Adds a new campground
     router.post("/", middleware.isLoggedIn, function(req, res){
@@ -51,6 +128,7 @@
         res.render("./campground/new");
     });
     
+    //
     router.get("/:id", function(req, res){
         var id = req.params.id;
         Campground.findById(id).populate("comments").exec(function(err, foundCampground){

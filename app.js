@@ -8,7 +8,6 @@ var express          = require("express"),
     User             = require("./models/user"),
     flash            = require("connect-flash"),
     methodOverride   = require("method-override"),
-    geocoder         = require("geocoder"),
     request          = require("request"),
     fs               = require("fs");
    
@@ -40,6 +39,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
+
 
 //SETTING UP EXPRESS SESSION
 app.use(require("express-session")({
@@ -75,7 +75,7 @@ app.use(function(req, res, next){
         url:`http://ipinfo.io/${ip}`,
         json:true
         }, function (error, response, body) {
-            var guestInfo = {
+           var guestInfo = {
                 city: body.city,
                 country: body.country,
                 ip: body.ip
@@ -86,6 +86,7 @@ app.use(function(req, res, next){
         next();
     })
 });
+
 
 //Creating a server log
 // app.use((req, res, next)=>{
@@ -122,3 +123,25 @@ app.use("/", authRoutes);
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Server Started");
 });
+// var getIP = app.use(function(req, res, next){
+//     var now = new Date().toString();
+//     var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+//     var list = ip.split(",");
+//     ip= list[list.length-1];
+//     var city, country;
+//     request({
+//         url:`http://ipinfo.io/${ip}`,
+//         json:true
+//         }, function (error, response, body) {
+//             var guestInfo = {
+//                 city: body.city,
+//                 country: body.country,
+//                 ip: body.ip
+//             }
+//         res.locals.guestInfo = guestInfo;
+//         res.locals.error = req.flash("error");
+//         res.locals.success = req.flash("success");
+//         next();
+//     })
+// });
+// module.exports.getIP = getIP();

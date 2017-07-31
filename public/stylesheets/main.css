@@ -54,6 +54,20 @@ h1, h2, h4{
     box-shadow: 5px 5px 15px #111111;
     position: relative;
 }
+.alerts {
+    position: fixed;
+    z-index: 10000;
+    width: 13.500em;
+    top: 1em;
+    right: 1em;
+}
+ 
+.alerts > div {
+    padding: .8em;
+    margin-bottom: .4em;
+    background-color: rgba(200, 200, 200, 0.8);
+    cursor: default;
+}
 
 #map{
     height: 400px;
@@ -72,4 +86,5 @@ h1, h2, h4{
 #inline-btn{
     display:inline;
 }
+
 

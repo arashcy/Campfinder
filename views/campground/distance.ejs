@@ -1,0 +1,74 @@
+
+
+<% include ../partials/header %>
+
+<!--<script>alert(<%= message%> + 'kilometers')</script>-->
+
+
+<div class="container">    
+    
+    
+        <div class="col-md-12">
+            <div class="thumbnail">
+                <h2 id="campgroundName"><%= campground.name%></h2>
+                    <div class="caption-full">
+                        <div id = "map"></div>
+                        <p>The distance between your city (<%=guestInfo.country%>, <%= guestInfo.city%>) and <%=campground.location%> is: <%= message.toFixed(0)/1000%> KiloMeters</p>
+                    </div> 
+            </div>    
+            
+            </div>  
+        </div>
+    </div>
+    
+    <script>
+  function initMap() {
+    var lat = <%= campground.lat %>;
+    var lng = <%= campground.lng %>;
+    var center = {lat: lat, lng: lng };
+    var lat2 = <%= guestLat%>;
+    var lng2 = <%= guestLng%>;
+    var guestCenter = {lat: lat2, lng: lng2 };
+    
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 2,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= campground.name %><br />
+      <%= campground.location %></strong>
+      <p><%= campground.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    
+    
+    
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    
+    var marker2 =  new google.maps.Marker({
+        position: guestCenter,
+        map: map
+    });
+    
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+    
+        
+    marker2.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+    
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJ62_qAIDp_zR4T9DDl7tvE837msAdzBc&callback=initMap"></script>
+
+
+    
+<% include ../partials/footer %>
