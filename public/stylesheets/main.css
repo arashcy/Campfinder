@@ -34,6 +34,7 @@ width: 100%;
     padding: 10px;
 }
 
+
 .thumbnail img{
     width:100%;
     
@@ -87,4 +88,7 @@ h1, h2, h4{
     display:inline;
 }
 
+#commentWell{
+    padding: 10px;
+}
 

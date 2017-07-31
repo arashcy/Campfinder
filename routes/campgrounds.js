@@ -5,6 +5,7 @@
         middleware  = require("../middleware"),
         geocoder    = require("geocoder"),
         request     = require("request"),
+        
         fs          = require("fs"),
         weather     = require("../weather/weather");
         
@@ -111,7 +112,7 @@
             var lng = data.results[0].geometry.location.lng;
             var location = data.results[0].formatted_address;
             
-            var newCampground = {name: name, image: imageURL, description: desc, price: price, author:author, location: location, lat: lat, lng: lng, summary:summary};
+            var newCampground = {name: name, image: imageURL, description: desc, price: price, author:author, location: location, lat: lat, lng: lng};
         Campground.create(newCampground, function(error, newCampground){
             if(error){
                 console.log(error);
@@ -181,7 +182,7 @@
                     if(err){
                     res.redirect("back");
                     }else{
-                        req.flash("success", "Campground post was successfully edited!")
+                        req.flash("success", "Campground post was successfully edited!");
                         res.redirect("/campgrounds/" + req.params.id);            
                     
                     }
@@ -195,8 +196,8 @@
             if(err){
                 res.redirect("/campgrounds")
             }else{
-                req.flash("success", "Campground post was successfully deleted!")
-                res.redirect("/campgrounds")
+                req.flash("success", "Campground post was successfully deleted!");
+                res.redirect("/campgrounds");
             }
         })
     })

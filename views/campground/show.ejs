@@ -32,19 +32,21 @@
                         <% if((currentUser && campground.author.id.equals(currentUser._id)) || (currentUser && currentUser.username == "arash")){%>
                         <a class="btn btn-xs btn-warning" href="/campgrounds/<%=campground.id%>/edit">Edit!</a>    
                         <form id="inline-btn" action="/campgrounds/<%= campground.id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-xs btn-danger">Delete!</button>    
+                            <button class="btn btn-xs btn-danger">Delete!</button>
+                            <br></br>
                         </form>
                         <% }%>
                         <form id="inline-btn" action="/campgrounds/<%= campground._id%>/distance" method="GET">
-                             <button type="submit" class="btn btn-xs btn-info">Calculate Distance</button>
+                             <button type="submit" class="btn btn-sm btn-info">Calculate Distance</button>
                         </form>
                         <p><em>Submitted by <%= campground.author.username%></em></p>
                     </div> 
             </div>    
-            <div class="well">
+            <div class="thumbnail" id="commentWell">
                 <div class="text-right">
-                    <a href="/campgrounds/<%=campground._id%>/comments/new" class="btn btn-primary">Add New Comment</a>
+                    <a href="/campgrounds/<%=campground._id%>/comments/new" class="btn btn-sm btn-info pull-left">Add New Comment</a>
                 </div>
+                <br>
                 <hr>
                 <div class="row">
                     <div class="col-md-12">

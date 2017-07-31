@@ -81,8 +81,6 @@ app.use(function(req, res, next){
                 ip: body.ip
             }
         res.locals.guestInfo = guestInfo;
-        res.locals.error = req.flash("error");
-        res.locals.success = req.flash("success");
         next();
     })
 });
