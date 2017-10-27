@@ -1,0 +1,47 @@
+<% include ../partials/header %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Acme Web Design</title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="wrapper animated bounceInLeft">
+      <div class="company-info">
+        <h3>Developer Contact Info</h3>
+        <ul>
+          <li><i class="fa fa-road"></i> 1211 South Bozeman</li>
+          <li><i class="fa fa-phone"></i> (406)-577-6125</li>
+          <li><i class="fa fa-envelope"></i> Arashcyruss@gmail.com</li>
+        </ul>
+      </div>
+      <div class="contact">
+        <h3>Join our Newsletter for updates</h3>
+        <form action="/newsletter" method="POST">
+              <p>
+                <label>Name</label>
+                <input type="text" name="name">
+              </p>
+              <p>
+                <label>Email Address</label>
+                <input type="email" name="email">
+              </p>
+              <p>
+              <p class="full">
+
+                <button type="submit">Submit</button>          
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+<% include ../partials/footer %>

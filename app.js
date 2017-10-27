@@ -10,12 +10,12 @@ var express          = require("express"),
     methodOverride   = require("method-override"),
     request          = require("request"),
     fs               = require("fs");
-   
+
    //Requiring routes
 var authRoutes       = require("./routes/auth"),
     commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds");
-    
+
 //INITIALIZING APP TO EXPRESS FUNCTION
 var app = express();
 
@@ -29,8 +29,13 @@ mongoose.Promise = global.Promise;
 
 //SETTING UP THE DATABASE
 // mongoose.connect("mongodb://localhost/yelp_camp");
-mongoose.connect("mongodb://arash:arashajam@ds151222.mlab.com:51222/campfinder");
-
+const port = process.env.PORT || 3000;
+console.log(process.env.PORT);
+if(port != 3000){
+mongoose.connect('mongodb://arash:arashajam@ds151222.mlab.com:51222/campfinder');
+} else{
+  mongoose.connect('mongodb://localhost:27017/Campfinder');
+}
 //SET TO EJS
 app.set("view engine", "ejs");
 
@@ -50,7 +55,7 @@ app.use(require("express-session")({
 
 
 app.use(passport.initialize());
-app.use(passport.session()); 
+app.use(passport.session());
 
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -86,60 +91,13 @@ app.use(function(req, res, next){
 });
 
 
-//Creating a server log
-// app.use((req, res, next)=>{
-//     var now = new Date().toString();
-//     var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
-//         var list = ip.split(",");
-//         ip= list[list.length-1];
-//     var city, country;
-    
-//     request({
-//         url:'http://ipinfo.io/',
-//         json:true
-//     }, function (error, response, body) {
-//         console.log('body:', body); // Print the error if one occurred
-//         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-//         city = body.city;
-//         country = body.country;
-//         var log = `Server accessed: ${now} by ${req.method} method. ${req.url}. IP: ${ip}. Country: ${country}, City: ${city} \n`;
-//         fs.appendFile('server.log', log, (error)=>{
-//             if(error) console.log(error);
-//         })
-//     });
-//     next();
-// })
-
-
 
 //Routes
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/", authRoutes);
-    
-    
-app.listen(process.env.PORT, process.env.IP, function(){
+
+
+app.listen(port, process.env.IP, function(){
     console.log("Server Started");
 });
-// var getIP = app.use(function(req, res, next){
-//     var now = new Date().toString();
-//     var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
-//     var list = ip.split(",");
-//     ip= list[list.length-1];
-//     var city, country;
-//     request({
-//         url:`http://ipinfo.io/${ip}`,
-//         json:true
-//         }, function (error, response, body) {
-//             var guestInfo = {
-//                 city: body.city,
-//                 country: body.country,
-//                 ip: body.ip
-//             }
-//         res.locals.guestInfo = guestInfo;
-//         res.locals.error = req.flash("error");
-//         res.locals.success = req.flash("success");
-//         next();
-//     })
-// });
-// module.exports.getIP = getIP();
